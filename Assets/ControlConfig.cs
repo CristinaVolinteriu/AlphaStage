@@ -28,7 +28,7 @@ public class ControlConfig : MonoBehaviour {
     // Another way is to let the player click on one of the GUI buttons and pick another control to switch it
     // Most likely this will be the one we will use
     // I shall note it with "CC" from Cycling Control
-    private KeyCode orig_pcItem1, orig_pcItem2, orig_pcItem3, orig_pcItem4, orig_pcInv, orig_pcPause, orig_xInt, orig_xPause;
+    private KeyCode orig_pcItem1, orig_pcItem2, orig_pcItem3, orig_pcItem4, orig_pcInv, orig_pcPause, orig_xInv, orig_xPause;
     bool ShowPopup = false;
     KeyCode PreviousKey;
 
@@ -106,13 +106,13 @@ public class ControlConfig : MonoBehaviour {
             pcAim = KeyCode.Mouse1;
 
             //CC:
-            orig_pcItem1 = pcItem1;
+            orig_pcItem1 = pcItem1; // KeyCode.Alpha1;
             orig_pcItem2 = pcItem2;
             orig_pcItem3 = pcItem3;
             orig_pcItem4 = pcItem4;
             orig_pcInv = pcInv;
             orig_pcPause = pcPause;
-            orig_xInt = xInv;
+            orig_xInv = xInv;
             orig_xPause = xPause;
         }
     }
@@ -304,6 +304,14 @@ public class ControlConfig : MonoBehaviour {
         cProfile = Switcher;
     }
 
+    // The user can reset the controls to their default values
+    void Reset()
+    {
+        SetDefaultValues();
+        ShowPopup = false;
+        PreviousKey = KeyCode.None;
+    }
+
     /// <summary>
     /// We use labels to show what actions the player can do
     /// and buttons to show what inputs the actions are mapped to.
@@ -389,7 +397,101 @@ public class ControlConfig : MonoBehaviour {
         }
 
         // CC
+        if(!ShowPopup)
+        {
+            if(GUI.Button(new Rect(150, 125, 135, 20), PC_Item1))
+            {
+                ShowPopup = true;
+                PreviousKey = pcItem1;
+            }
+            if (GUI.Button(new Rect(150, 150, 135, 20), PC_Item2))
+            {
+                ShowPopup = true;
+                PreviousKey = pcItem2;
+            }
+            if (GUI.Button(new Rect(150, 175, 135, 20), PC_Item3))
+            {
+                ShowPopup = true;
+                PreviousKey = pcItem3;
+            }
+            if (GUI.Button(new Rect(150, 200, 135, 20), PC_Item4))
+            {
+                ShowPopup = true;
+                PreviousKey = pcItem4;
+            }
+            if (GUI.Button(new Rect(150, 250, 135, 20), PC_Pause))
+            {
+                ShowPopup = true;
+                PreviousKey = pcPause;
+            }
+            if (GUI.Button(new Rect(150, 225, 135, 20), PC_Inv))
+            {
+                ShowPopup = true;
+                PreviousKey = pcInv;
+            }
+            if (GUI.Button(new Rect(325, 225, 135, 20), Xbox_Inv))
+            {
+                ShowPopup = true;
+                PreviousKey = xInv;
+            }
+            if (GUI.Button(new Rect(325, 250, 135, 20), Xbox_Pause))
+            {
+                ShowPopup = true;
+                PreviousKey = xPause;
+            }
+        }
+        else
+        {
+            GUI.BeginGroup(new Rect(Screen.width / 2 - 300, Screen.height / 2 - 300, 600, 400));
+            GUI.Box(new Rect(0, 0, 600, 400), "Pick A Control to Switch");
+            if(GUI.Button(new Rect(150, 125, 135, 20), "1"))
+            {
+                SetNewKey(PreviousKey, orig_pcItem1);
+                ShowPopup = false;
+            }
+            if (GUI.Button(new Rect(150, 150, 135, 20), "2"))
+            {
+                SetNewKey(PreviousKey, orig_pcItem2);
+                ShowPopup = false;
+            }
+            if (GUI.Button(new Rect(150, 175, 135, 20), "3"))
+            {
+                SetNewKey(PreviousKey, orig_pcItem3);
+                ShowPopup = false;
+            }
+            if (GUI.Button(new Rect(150, 200, 135, 20), "4"))
+            {
+                SetNewKey(PreviousKey, orig_pcItem4);
+                ShowPopup = false;
+            }
+            if (GUI.Button(new Rect(150, 225, 135, 20), "I"))
+            {
+                SetNewKey(PreviousKey, orig_pcInv);
+                ShowPopup = false;
+            }
+            if (GUI.Button(new Rect(150, 250, 135, 20), "Escape"))
+            {
+                SetNewKey(PreviousKey, orig_pcPause);
+                ShowPopup = false;
+            }
+            if (GUI.Button(new Rect(325, 225, 135, 20), "A Button"))
+            {
+                SetNewKey(PreviousKey, orig_xInv);
+                ShowPopup = false;
+            }
+            if (GUI.Button(new Rect(325, 250, 135, 20), ""))
+            {
+                SetNewKey(PreviousKey, orig_xPause);
+                ShowPopup = false;
+            }
+            GUI.EndGroup();
+        }
 
+        // For reset
+        if(GUI.Button(new Rect(230, 370, 135, 20), "Reset Controls"))
+        {
+            Reset();
+        }
 
         GUI.EndGroup();
     }
