@@ -17,16 +17,17 @@ public class GUI_3D : MonoBehaviour {
     Color txtColor; // Used to modify the alpha value of the TextMesh 
                     // This will allow us to turn on/off the TextMesh object withough having to instanstiate it
             // Next 3 are used for creating a timer to pick when we want to show or hide the damage report
-    public float SpawnTime = 2; 
-    public float KillTime = 3;
-    public float PreviousTime = 0;
+    public float SpawnTime = 2; // Used to spawn the damage report
+    public float KillTime = 3; // Used to hide the damage report
+    public float PreviousTime = 0; // Used to mark the previous time we showed the damage report
     bool HasChanged = false; // Checks if we received damage or not
 
 	// Use this for initialization
 	void Start () {
         OrigScale = HealthBar.transform.localScale;
 
-
+        txtColor = DamageReport.color; // Is used to show or hide the damage report
+        txtColor.a = 0; // Is being set to 0 so the player can only see it when damage is done
 	}
 	
 	// Update is called once per frame
@@ -36,10 +37,32 @@ public class GUI_3D : MonoBehaviour {
 
         // This is used for testing
         // Everytime you press left mouse button the HP bar will drop
+        /*
         if(Input.GetKey("Fire1"))
         {
             currentHealth -= 1.00f;
             ChangeBar();
+        }
+        */
+
+        DamageReport.color = txtColor;
+        if(Time.time > (SpawnTime + PreviousTime))
+        {
+            DamageReport.text = Damage.ToString();
+            txtColor.a = 1;
+            if(!HasChanged)
+            {
+                currentHealth -= Damage;
+                ChangeBar();
+            }
+        }
+        if(Time.time > (KillTime + PreviousTime))
+        {
+            DamageReport.text = " ";
+
+            txtColor.a = 0;
+            PreviousTime = Time.time;
+            HasChanged = true;
         }
 	}
 
